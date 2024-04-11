@@ -1,112 +1,64 @@
 package tests.freetest;
 
-import com.codeborne.selenide.Configuration;
-import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.$;
 
-@DisplayName("Тесты на проверку вывода на UI адресов поликлиник")
-public class freetests {
-    @BeforeEach
-    void setUp(){
-        open("");
-        Selenide.closeWebDriver();
-    }
+@DisplayName("тест")
+public class gitHaveText {
 
-    @BeforeAll
-    static void beforeAll(){
-        Configuration.baseUrl ="https://rzd-medicine.ru/";
-        Configuration.browserSize = "1366x768";
-        Configuration.pageLoadStrategy = "eager";
-        Configuration.holdBrowserOpen = true;
-    }
-
-    @ValueSource(strings = {
-            "г. Москва и МО, ул. Новая Басманная, 5", "г. Москва и МО, рабочий посёлок Киевский, 12а"
-    })
-    @ParameterizedTest(name = "Проверка наличия адреса медицинского учреждения - {0}")
+    @Disabled
     @Test
+    void testHaTest() {
+
+        open("https://github.com");
+
+        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
+                $$("li").find(text("Enterprise")).click();
+        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
+                .shouldBe(text("Contact sales"));
+    }
+
+    @Disabled
+    @ValueSource(strings = {
+            "Start a free trial",
+            "Contact sales"
+    })
+    @ParameterizedTest(name = "Проверка наличия текста - {0}")
     @Tags({
             @Tag("WEB"),
             @Tag("BLOCKER")
     })
-    void fillFormTest(String searchQuery) {
-        $(".header-menu").$(byText("Цены")).click();
-        $(".pricelist").$(".select").click();
-        $(".dropdownList").$(".wrap").$("[aria-label=Поиск]").setValue("поликлиника");
-        $(".dropdownList").$(".list").$(".item-description")
-                .shouldHave(text(searchQuery));
+    void testHaveTest(String searchQuery) {
+
+        open("https://github.com");
+
+        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
+                $$("li").find(text("Enterprise")).click();
+        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
+                .shouldBe(text(searchQuery));
     }
 
-    @Disabled("Jira-1234")
-    @Test
-    @DisplayName("WEB: Проверка адреса медицинского учреждения - г. Москва и МО, рабочий посёлок Киевский, 12а")
-    @Tag("WEB")
-    void fillFormTestq() {
-        $(".header-menu").$(byText("Цены")).click();
-        $(".pricelist").$(".select").click();
-        $(".dropdownList").$(".wrap").$("[aria-label=Поиск]").setValue("поликлиника");
-        $(".dropdownList").$(".list")
-                .shouldHave(text("г. Москва и МО, рабочий посёлок Киевский, 12а"));
+    @CsvSource(value = {
+            "Start a free trial,https://github.com/organizations/enterprise_plan?ref_cta=Start+a+free+trial&ref_loc=hero&ref_page=%2Fenterprise",
+            "Contact sales,https://github.com/enterprise/contact?ref_cta=Contact+Sales&ref_loc=hero&ref_page=%2Fenterprise&scid=&utm_campaign=Enterprise&utm_content=Enterprise&utm_medium=referral&utm_source=github"
+    })
+    @ParameterizedTest(name = "Проверка наличия текста - {0} и его ссылки {1}")
+    @Tags({
+            @Tag("WEB"),
+            @Tag("BLOCKER")
+    })
+    void testHTest(String searchQuery, String expectedLink) {
+
+        open("https://github.com");
+
+        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
+                $$("li").find(text("Enterprise")).click();
+        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
+                .shouldBe(text(expectedLink));
     }
-
-
-    @Test
-    void imagesYandex() {
-        open("https://github.com/selenide/selenide");
-        $("#wiki-tab").click();
-        $("#wiki-pages-filter").setValue("SoftAssertions");
-        $(byText("SoftAssertions")).click();
-        $("#discussions-tab").click();
-        $(".ActionList").$$("<ul>");
-
-
-    }
-
-
-
-}
-
-
-
-plugins {
-    id 'java'
-}
-
-group 'org.example24'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
-compileJava {
-    options.encoding = 'UTF-8'
-}
-compileTestJava {
-    options.encoding = 'UTF-8'
-}
-
-dependencies {
-    testImplementation(
-            'org.junit.jupiter:junit-jupiter:5.9.2',
-            'com.codeborne:selenide:6.19.1',
-            'com.github.javafaker:javafaker:1.0.2',
-            'org.slf4j:slf4j-simple:2.0.7'
-    )
-}
-
-test {
-    useJUnitPlatform()
-}
-
-compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile){
-    options.encoding = 'UTF-8'
 }
