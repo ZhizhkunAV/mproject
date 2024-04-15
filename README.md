@@ -1,64 +1,51 @@
-package tests.freetest;
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+}
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.*;
+group 'org.example24'
+version '1.0-SNAPSHOT'
 
-@DisplayName("тест")
-public class gitHaveText {
-
-    @Disabled
-    @Test
-    void testHaTest() {
-
-        open("https://github.com");
-
-        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
-                $$("li").find(text("Enterprise")).click();
-        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
-                .shouldBe(text("Contact sales"));
+allure { //подключение отчета аллюр
+    report {
+        version.set("2.27.0")
     }
-
-    @Disabled
-    @ValueSource(strings = {
-            "Start a free trial",
-            "Contact sales"
-    })
-    @ParameterizedTest(name = "Проверка наличия текста - {0}")
-    @Tags({
-            @Tag("WEB"),
-            @Tag("BLOCKER")
-    })
-    void testHaveTest(String searchQuery) {
-
-        open("https://github.com");
-
-        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
-                $$("li").find(text("Enterprise")).click();
-        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
-                .shouldBe(text(searchQuery));
+    adapter { //отвечает за появление папочки билд-аллюр-резулт.
+        aspectjWeaver.set(true)
+        frameworks {
+            junit5 {
+                adapterVersion.set("2.27.0") //версия интеграции фреймворка и аллюра
+            }
+        }
     }
+}
 
-    @CsvSource(value = {
-            "Start a free trial,https://github.com/organizations/enterprise_plan?ref_cta=Start+a+free+trial&ref_loc=hero&ref_page=%2Fenterprise",
-            "Contact sales,https://github.com/enterprise/contact?ref_cta=Contact+Sales&ref_loc=hero&ref_page=%2Fenterprise&scid=&utm_campaign=Enterprise&utm_content=Enterprise&utm_medium=referral&utm_source=github"
-    })
-    @ParameterizedTest(name = "Проверка наличия текста - {0} и его ссылки {1}")
-    @Tags({
-            @Tag("WEB"),
-            @Tag("BLOCKER")
-    })
-    void testHTest(String searchQuery, String expectedLink) {
+repositories {
+    mavenCentral()
+}
 
-        open("https://github.com");
+compileJava {
+    options.encoding = 'UTF-8'
+}
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
 
-        $(".Header-old ").$$("li").findBy(text("Solutions")).hover().$(".HeaderMenu-dropdown").
-                $$("li").find(text("Enterprise")).click();
-        $(".Primer_Brand__Hero-module__Hero-actions___oH1NT")
-                .shouldBe(text(expectedLink));
-    }
+dependencies {
+    testImplementation(
+            'org.junit.jupiter:junit-jupiter:5.9.2',
+            'com.codeborne:selenide:6.19.1',
+            'com.github.javafaker:javafaker:1.0.2',
+            'org.slf4j:slf4j-simple:2.0.7'
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile){
+    options.encoding = 'UTF-8'
 }
